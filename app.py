@@ -82,34 +82,37 @@ st.markdown("""
     .badge-teal {
         background-color: rgba(14, 165, 233, 0.2);
         color: #38BDF8 !important;
-        padding: 4px 12px;
+        padding: 8px 16px;
         border-radius: 9999px;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         font-weight: 600;
         border: 1px solid rgba(56, 189, 248, 0.4);
         display: inline-block;
+        margin: 4px 0;
     }
     
     .badge-alert {
         background-color: rgba(239, 68, 68, 0.2);
         color: #F87171 !important;
-        padding: 4px 12px;
+        padding: 8px 16px;
         border-radius: 9999px;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         font-weight: 600;
         border: 1px solid rgba(248, 113, 113, 0.4);
         display: inline-block;
+        margin: 4px 0;
     }
     
     .badge-success {
         background-color: rgba(34, 197, 94, 0.2);
         color: #4ADE80 !important;
-        padding: 4px 12px;
+        padding: 8px 16px;
         border-radius: 9999px;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         font-weight: 600;
         border: 1px solid rgba(74, 222, 128, 0.4);
         display: inline-block;
+        margin: 4px 0;
     }
     
     /* Tabs Navigation Header - High Contrast Fix */
@@ -137,6 +140,78 @@ st.markdown("""
     /* Form & Input Elements */
     div[data-baseweb="select"] span {
         color: #FFFFFF !important;
+    }
+    
+    /* Button Styling */
+    .stButton button {
+        width: 100%;
+        background-color: #0284C7 !important;
+        color: #FFFFFF !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
+        padding: 12px 16px !important;
+        border-radius: 8px !important;
+        border: 1px solid rgba(56, 189, 248, 0.5) !important;
+        transition: all 0.3s ease;
+        white-space: normal !important;
+        height: auto !important;
+    }
+    
+    .stButton button:hover {
+        background-color: #0369A1 !important;
+        box-shadow: 0 0 20px rgba(56, 189, 248, 0.4) !important;
+    }
+    
+    /* Slider Styling */
+    .stSlider label {
+        color: #E2E8F0 !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
+    }
+    
+    /* Selectbox Styling */
+    .stSelectbox label {
+        color: #E2E8F0 !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
+    }
+    
+    /* Expander Styling */
+    .stExpander summary {
+        background-color: rgba(28, 37, 65, 0.8) !important;
+        border: 1px solid rgba(58, 80, 107, 0.5) !important;
+        padding: 12px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        color: #38BDF8 !important;
+    }
+    
+    /* Column Spacing Improvements */
+    [data-testid="column"] {
+        padding: 8px !important;
+    }
+    
+    /* Subheader Styling */
+    .stMarkdown h2 {
+        margin-top: 24px !important;
+        margin-bottom: 16px !important;
+        padding-bottom: 12px !important;
+    }
+    
+    /* Warning/Info Box Styling */
+    .stWarning, .stInfo, .stSuccess {
+        border-radius: 8px !important;
+        padding: 16px !important;
+        font-size: 0.95rem !important;
+    }
+    
+    /* Text Input Styling */
+    .stTextInput input {
+        background-color: #1C2541 !important;
+        color: #F8FAFC !important;
+        border: 1px solid rgba(58, 80, 107, 0.5) !important;
+        border-radius: 8px !important;
+        font-size: 0.95rem !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -626,16 +701,28 @@ with tabs[4]:
     st.markdown("Input patient clinical values or load a preset profile to generate live CKD risk inference & personalized SHAP attribution.")
     
     # Preset Profile Loader Buttons
-    st.markdown("**Load Preset Patient Profiles:**")
-    p_col1, p_col2, p_col3 = st.columns(3)
+    st.markdown("### 📋 Load Preset Patient Profiles")
+    st.markdown("Select a reference patient profile to populate lab values:")
+    
+    p_col1, p_col2, p_col3 = st.columns([1, 1, 1], gap="medium")
     
     preset_choice = None
-    if p_col1.button("🟢 Load Healthy Control Patient", use_container_width=True):
-        preset_choice = "healthy"
-    if p_col2.button("🟡 Load Moderate Risk (Stage 2/3 CKD)", use_container_width=True):
-        preset_choice = "moderate"
-    if p_col3.button("🔴 Load High Risk (Stage 4/5 CKD)", use_container_width=True):
-        preset_choice = "high"
+    with p_col1:
+        if st.button("🟢 Healthy Control", use_container_width=True, key="btn_healthy"):
+            preset_choice = "healthy"
+            st.success("✓ Loaded Healthy Control Patient Profile")
+    
+    with p_col2:
+        if st.button("🟡 Moderate Risk (Stage 2/3)", use_container_width=True, key="btn_moderate"):
+            preset_choice = "moderate"
+            st.warning("⚠ Loaded Moderate Risk Patient Profile")
+    
+    with p_col3:
+        if st.button("🔴 High Risk (Stage 4/5)", use_container_width=True, key="btn_high"):
+            preset_choice = "high"
+            st.error("⛔ Loaded High Risk Patient Profile")
+    
+    st.markdown("---")
 
     # Default baseline values
     defaults = {
@@ -660,24 +747,46 @@ with tabs[4]:
 
     st.markdown("---")
     
-    sim_col1, sim_col2 = st.columns([1.2, 1])
+    sim_col1, sim_col2 = st.columns([1.3, 1.2], gap="large")
     
     with sim_col1:
         st.markdown("#### 📋 Patient Laboratory Input Panel")
+        st.markdown("<small style='color: #94A3B8;'>Adjust patient biomarker values to simulate real-time risk assessment</small>", unsafe_allow_html=True)
+        st.markdown("")
         
-        in_creat = st.slider("Serum Creatinine (mg/dL)", 0.2, 10.0, float(defaults["SerumCreatinine"]), step=0.1)
-        in_gfr = st.slider("GFR (mL/min/1.73m²)", 5.0, 150.0, float(defaults["GFR"]), step=1.0)
-        in_bun = st.slider("BUN Levels (mg/dL)", 5.0, 100.0, float(defaults["BUNLevels"]), step=1.0)
-        in_fbs = st.slider("Fasting Blood Sugar (mg/dL)", 60.0, 300.0, float(defaults["FastingBloodSugar"]), step=1.0)
-        in_hba1c = st.slider("HbA1c (%)", 4.0, 14.0, float(defaults["HbA1c"]), step=0.1)
-        in_sbp = st.slider("Systolic BP (mmHg)", 80, 220, int(defaults["SystolicBP"]), step=1)
-        in_bmi = st.slider("BMI (kg/m²)", 15.0, 50.0, float(defaults["BMI"]), step=0.5)
+        # Organized input sections
+        with st.container():
+            st.markdown("**Kidney Function Markers**")
+            in_creat = st.slider("Serum Creatinine (mg/dL)", 0.2, 10.0, float(defaults["SerumCreatinine"]), step=0.1, help="Normal: <1.2 mg/dL")
+            in_gfr = st.slider("GFR (mL/min/1.73m²)", 5.0, 150.0, float(defaults["GFR"]), step=1.0, help="Normal: >60 mL/min")
+            in_bun = st.slider("BUN Levels (mg/dL)", 5.0, 100.0, float(defaults["BUNLevels"]), step=1.0, help="Normal: 7-20 mg/dL")
         
-        c_bool1, c_bool2, c_bool3 = st.columns(3)
-        in_itching = c_bool1.selectbox("Itching", [0, 1], index=int(defaults["Itching"]), format_func=lambda x: "Yes" if x == 1 else "No")
-        in_cramps = c_bool2.selectbox("Muscle Cramps", [0, 1], index=int(defaults["MuscleCramps"]), format_func=lambda x: "Yes" if x == 1 else "No")
-        in_protein = c_bool3.selectbox("Protein in Urine", [0, 1], index=int(defaults["ProteinInUrine"]), format_func=lambda x: "Yes" if x == 1 else "No")
-
+        st.markdown("")
+        with st.container():
+            st.markdown("**Metabolic Markers**")
+            in_fbs = st.slider("Fasting Blood Sugar (mg/dL)", 60.0, 300.0, float(defaults["FastingBloodSugar"]), step=1.0, help="Normal: 70-100 mg/dL")
+            in_hba1c = st.slider("HbA1c (%)", 4.0, 14.0, float(defaults["HbA1c"]), step=0.1, help="Normal: <5.7%")
+        
+        st.markdown("")
+        with st.container():
+            st.markdown("**Cardiovascular & Anthropometric**")
+            in_sbp = st.slider("Systolic BP (mmHg)", 80, 220, int(defaults["SystolicBP"]), step=1, help="Normal: <120 mmHg")
+            in_bmi = st.slider("BMI (kg/m²)", 15.0, 50.0, float(defaults["BMI"]), step=0.5, help="Normal: 18.5-24.9")
+        
+        st.markdown("")
+        with st.container():
+            st.markdown("**Clinical Symptoms**")
+            c_bool1, c_bool2, c_bool3 = st.columns(3, gap="small")
+            with c_bool1:
+                in_itching = st.selectbox("Itching", [0, 1], index=int(defaults["Itching"]), format_func=lambda x: "Yes" if x == 1 else "No", label_visibility="collapsed")
+                st.caption("Itching")
+            with c_bool2:
+                in_cramps = st.selectbox("Muscle Cramps", [0, 1], index=int(defaults["MuscleCramps"]), format_func=lambda x: "Yes" if x == 1 else "No", label_visibility="collapsed")
+                st.caption("Muscle Cramps")
+            with c_bool3:
+                in_protein = st.selectbox("Protein in Urine", [0, 1], index=int(defaults["ProteinInUrine"]), format_func=lambda x: "Yes" if x == 1 else "No", label_visibility="collapsed")
+                st.caption("Protein in Urine")
+    
     # Run Prediction
     patient_df = pd.DataFrame([{
         "SerumCreatinine": in_creat,
@@ -700,6 +809,8 @@ with tabs[4]:
     
     with sim_col2:
         st.markdown("#### 🎯 Real-Time Clinical Inference")
+        st.markdown("<small style='color: #94A3B8;'>Live CKD risk prediction with SHAP-based feature attribution</small>", unsafe_allow_html=True)
+        st.markdown("")
         
         # Risk Category Badge
         if prob_ckd < 0.20:
@@ -727,19 +838,20 @@ with tabs[4]:
                 ]
             }
         ))
-        fig_gauge.update_layout(height=280)
+        fig_gauge.update_layout(height=300, margin=dict(l=20, r=20, t=40, b=20))
         apply_plotly_theme(fig_gauge)
         st.plotly_chart(fig_gauge, use_container_width=True)
         
         st.markdown(f"""
-        <div style="text-align: center; margin-top: -10px;">
-            <span class="{badge_class}" style="font-size: 1.1rem; padding: 6px 18px;">
+        <div style="text-align: center; margin-top: 12px;">
+            <span class="{badge_class}" style="font-size: 1.05rem; padding: 8px 20px;">
                 {risk_label}
             </span>
         </div>
         """, unsafe_allow_html=True)
         
-        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("")
+        st.markdown("**Risk Factor Attribution:**")
         
         # Local Patient SHAP Contribution
         p_shap = explainer.shap_values(patient_scaled)[0]
@@ -757,9 +869,9 @@ with tabs[4]:
             orientation="h",
             color="Direction",
             color_discrete_map={"Increases Risk": "#EF4444", "Decreases Risk": "#10B981"},
-            title="Individual Patient SHAP Risk Factor Attribution"
+            title="Patient-Specific SHAP Attribution"
         )
-        fig_p_shap.update_layout(height=260)
+        fig_p_shap.update_layout(height=280, margin=dict(l=150, r=20, t=40, b=20))
         apply_plotly_theme(fig_p_shap)
         st.plotly_chart(fig_p_shap, use_container_width=True)
 
