@@ -645,7 +645,7 @@ with tabs[2]:
 # =========================================================
 with tabs[3]:
     st.subheader("🩺 Merck Clinical Patient Risk Assessment Simulator")
-    st.markdown("Input patient clinical values or load a preset profile to generate live CKD risk inference & personalized SHAP attribution.")
+    st.markdown("Input patient clinical values or load a preset profile to generate live CKD risk inference.")
     
     # Preset Profile Loader Buttons
     st.markdown("### 📋 Load Preset Patient Profiles")
@@ -756,7 +756,7 @@ with tabs[3]:
     
     with sim_col2:
         st.markdown("#### 🎯 Real-Time Clinical Inference")
-        st.markdown("<small style='color: #94A3B8;'>Live CKD risk prediction with SHAP-based feature attribution</small>", unsafe_allow_html=True)
+        st.markdown("<small style='color: #94A3B8;'>Live CKD risk prediction and stage-based risk categorization</small>", unsafe_allow_html=True)
         st.markdown("")
         
         # Risk Category Badge
@@ -790,34 +790,9 @@ with tabs[3]:
         st.plotly_chart(fig_gauge, use_container_width=True)
         
         st.markdown(f"""
-        <div style="text-align: center; margin-top: 12px;">
+        <div style="display: flex; justify-content: center; width: 100%; margin-top: 12px;">
             <span class="{badge_class}" style="font-size: 1.05rem; padding: 8px 20px;">
                 {risk_label}
             </span>
         </div>
         """, unsafe_allow_html=True)
-        
-        st.markdown("")
-        st.markdown("**Risk Factor Attribution:**")
-        
-        # Local Patient SHAP Contribution
-        p_shap = explainer.shap_values(patient_scaled)[0]
-        
-        p_shap_df = pd.DataFrame({
-            "Feature": final_features,
-            "SHAP_Value": p_shap,
-            "Direction": ["Increases Risk" if v > 0 else "Decreases Risk" for v in p_shap]
-        }).sort_values("SHAP_Value", key=abs, ascending=True)
-        
-        fig_p_shap = px.bar(
-            p_shap_df,
-            x="SHAP_Value",
-            y="Feature",
-            orientation="h",
-            color="Direction",
-            color_discrete_map={"Increases Risk": "#EF4444", "Decreases Risk": "#10B981"},
-            title="Patient-Specific SHAP Attribution"
-        )
-        fig_p_shap.update_layout(height=280, margin=dict(l=150, r=20, t=40, b=20))
-        apply_plotly_theme(fig_p_shap)
-        st.plotly_chart(fig_p_shap, use_container_width=True)
