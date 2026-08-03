@@ -13,7 +13,6 @@ import plotly.express as px
 import plotly.graph_objects as go
 from scipy import stats
 from sklearn.metrics import confusion_matrix
-import shap
 
 # ---------------------------------------------------------
 # Page Configuration & Styling
@@ -264,7 +263,6 @@ probs = bundle["probs"]
 model_summary_df = bundle["model_summary_df"]
 curves = bundle["curves"]
 threshold_sweeps = bundle["threshold_sweeps"]
-explainer = bundle["explainer"]
 
 # Map Diagnosis explicitly for clean visualization labeling
 df_clean["Diagnosis_Label"] = df_clean["Diagnosis"].map({
