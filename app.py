@@ -13,7 +13,6 @@ import plotly.express as px
 import plotly.graph_objects as go
 from scipy import stats
 from sklearn.metrics import confusion_matrix
-import shap
 
 # ---------------------------------------------------------
 # Page Configuration & Styling
@@ -33,6 +32,11 @@ st.markdown("""
         background-color: #F8FAFC !important;
         color: #0F172A !important;
         font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    /* Lock light-mode presentation and hide toolbar theme controls */
+    [data-testid="stToolbar"] {
+        display: none !important;
     }
     
     /* Headers & Subtitles */
@@ -118,10 +122,10 @@ st.markdown("""
     /* Tabs Navigation Header - Sleek Modern Redesign */
     .stTabs [data-baseweb="tab-list"] {
         gap: 10px;
-        background: linear-gradient(135deg, #EEF4FF 0%, #E2E8F0 100%);
+        background: #EAF2FF;
         padding: 10px;
         border-radius: 16px;
-        border: 1px solid rgba(148, 163, 184, 0.45);
+        border: 1px solid #BFDBFE;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 10px 28px rgba(15, 23, 42, 0.08);
     }
     .stTabs [data-baseweb="tab"] {
@@ -146,10 +150,10 @@ st.markdown("""
         outline-offset: 2px !important;
     }
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 45%, #0369A1 100%) !important;
-        color: #FFFFFF !important;
-        border-color: rgba(3, 105, 161, 0.85) !important;
-        box-shadow: 0 8px 20px rgba(2, 132, 199, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        background: #DBEAFE !important;
+        color: #1D4ED8 !important;
+        border-color: #93C5FD !important;
+        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.35);
         font-weight: 700 !important;
     }
     .stTabs [data-baseweb="tab-highlight"] {
@@ -264,7 +268,6 @@ probs = bundle["probs"]
 model_summary_df = bundle["model_summary_df"]
 curves = bundle["curves"]
 threshold_sweeps = bundle["threshold_sweeps"]
-explainer = bundle["explainer"]
 
 # Map Diagnosis explicitly for clean visualization labeling
 df_clean["Diagnosis_Label"] = df_clean["Diagnosis"].map({
@@ -645,7 +648,7 @@ with tabs[2]:
 # =========================================================
 with tabs[3]:
     st.subheader("🩺 Merck Clinical Patient Risk Assessment Simulator")
-    st.markdown("Input patient clinical values or load a preset profile to generate live CKD risk inference & personalized SHAP attribution.")
+    st.markdown("Input patient clinical values or load a preset profile to generate live CKD risk inference.")
     
     # Preset Profile Loader Buttons
     st.markdown("### 📋 Load Preset Patient Profiles")
@@ -750,13 +753,21 @@ with tabs[3]:
     
     patient_scaled = pd.DataFrame(scaler.transform(patient_df), columns=final_features)
     
-    # Model inference using tuned XGBoost
-    tuned_model = models["XGBoost (Tuned + SMOTE)"]
-    prob_ckd = tuned_model.predict_proba(patient_scaled)[0, 1]
+    simulation_model_names = list(models.keys())
+    default_sim_model = "Logistic Regression"
+    default_sim_model_idx = simulation_model_names.index(default_sim_model) if default_sim_model in simulation_model_names else 0
     
     with sim_col2:
         st.markdown("#### 🎯 Real-Time Clinical Inference")
-        st.markdown("<small style='color: #94A3B8;'>Live CKD risk prediction with SHAP-based feature attribution</small>", unsafe_allow_html=True)
+        st.markdown("<small style='color: #94A3B8;'>Live CKD risk prediction and stage-based risk categorization</small>", unsafe_allow_html=True)
+        selected_sim_model_name = st.selectbox(
+            "Select Model for Risk Simulation:",
+            options=simulation_model_names,
+            index=default_sim_model_idx,
+            key="sim_model_selector"
+        )
+        selected_sim_model = models[selected_sim_model_name]
+        prob_ckd = selected_sim_model.predict_proba(patient_scaled)[0, 1]
         st.markdown("")
         
         # Risk Category Badge
@@ -790,34 +801,9 @@ with tabs[3]:
         st.plotly_chart(fig_gauge, use_container_width=True)
         
         st.markdown(f"""
-        <div style="text-align: center; margin-top: 12px;">
+        <div style="display: flex; justify-content: center; width: 100%; margin-top: 12px;">
             <span class="{badge_class}" style="font-size: 1.05rem; padding: 8px 20px;">
                 {risk_label}
             </span>
         </div>
         """, unsafe_allow_html=True)
-        
-        st.markdown("")
-        st.markdown("**Risk Factor Attribution:**")
-        
-        # Local Patient SHAP Contribution
-        p_shap = explainer.shap_values(patient_scaled)[0]
-        
-        p_shap_df = pd.DataFrame({
-            "Feature": final_features,
-            "SHAP_Value": p_shap,
-            "Direction": ["Increases Risk" if v > 0 else "Decreases Risk" for v in p_shap]
-        }).sort_values("SHAP_Value", key=abs, ascending=True)
-        
-        fig_p_shap = px.bar(
-            p_shap_df,
-            x="SHAP_Value",
-            y="Feature",
-            orientation="h",
-            color="Direction",
-            color_discrete_map={"Increases Risk": "#EF4444", "Decreases Risk": "#10B981"},
-            title="Patient-Specific SHAP Attribution"
-        )
-        fig_p_shap.update_layout(height=280, margin=dict(l=150, r=20, t=40, b=20))
-        apply_plotly_theme(fig_p_shap)
-        st.plotly_chart(fig_p_shap, use_container_width=True)
