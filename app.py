@@ -246,8 +246,6 @@ model_summary_df = bundle["model_summary_df"]
 curves = bundle["curves"]
 threshold_sweeps = bundle["threshold_sweeps"]
 explainer = bundle["explainer"]
-shap_values = bundle["shap_values"]
-feat_imp = bundle["feat_imp"]
 
 # Map Diagnosis explicitly for clean visualization labeling
 df_clean["Diagnosis_Label"] = df_clean["Diagnosis"].map({
@@ -296,7 +294,6 @@ tabs = st.tabs([
     "🌐 Executive Overview",
     "🔬 Biostatistical Rigor",
     "⚡ Machine Learning Benchmark",
-    "🧬 SHAP Explainability",
     "🩺 Patient Risk Simulator"
 ])
 
@@ -625,78 +622,9 @@ with tabs[2]:
         st.write(f"• **Specificity (Recall No-CKD)**: {spec:.1%}")
 
 # =========================================================
-# TAB 4: SHAP EXPLAINABILITY
+# TAB 4: PATIENT RISK SIMULATOR
 # =========================================================
 with tabs[3]:
-    st.subheader("🧬 Model Explainability & SHAP Feature Attribution")
-    st.markdown("""
-    To ensure full interpretability for Merck medical reviewers, we use **SHAP (SHapley Additive exPlanations)** based on cooperative game theory to quantify the exact contribution of each biomarker to the model's predictions.
-    """)
-    
-    col_s1, col_s2 = st.columns(2)
-    
-    with col_s1:
-        st.markdown("### 📊 Feature Importance Ranking (XGBoost Gain vs SHAP)")
-        fig_imp = px.bar(
-            feat_imp,
-            x="Gain_Importance",
-            y="Feature",
-            orientation="h",
-            color="Mean_Abs_SHAP",
-            color_continuous_scale="Viridis",
-            title="Built-in XGBoost Gain Importance (Colored by Mean Abs SHAP)"
-        )
-        fig_imp.update_layout(yaxis=dict(autorange="reversed"))
-        apply_plotly_theme(fig_imp)
-        st.plotly_chart(fig_imp, use_container_width=True)
-
-    with col_s2:
-        st.markdown("### 🎯 Mean Absolute SHAP Value Impact")
-        fig_shap_bar = px.bar(
-            feat_imp.sort_values("Mean_Abs_SHAP", ascending=True),
-            x="Mean_Abs_SHAP",
-            y="Feature",
-            orientation="h",
-            color_discrete_sequence=["#38BDF8"],
-            title="Global Mean |SHAP Value| (Impact on Model Output Magnitude)"
-        )
-        apply_plotly_theme(fig_shap_bar)
-        st.plotly_chart(fig_shap_bar, use_container_width=True)
-
-    st.markdown("---")
-    st.markdown("### 📈 Directional Feature Impact Curves (SHAP Dependence Inspector)")
-    
-    selected_shap_feat = st.selectbox(
-        "Select Biomarker for Bivariate Risk Trajectory:",
-        options=final_features,
-        index=0
-    )
-    
-    feat_idx = final_features.index(selected_shap_feat)
-    shap_feat_vals = shap_values[:, feat_idx]
-    
-    dep_df = pd.DataFrame({
-        "Feature_Value": X_test[selected_shap_feat],
-        "SHAP_Value": shap_feat_vals,
-        "Diagnosis_Label": y_test.map({1: "CKD Patient (1524)", 0: "No CKD Control (135)"})
-    })
-    
-    fig_dep = px.scatter(
-        dep_df,
-        x="Feature_Value",
-        y="SHAP_Value",
-        color="Diagnosis_Label",
-        color_discrete_map=COLOR_MAP,
-        labels={"Feature_Value": f"Actual {selected_shap_feat} Value", "SHAP_Value": f"SHAP Risk Contribution for {selected_shap_feat}", "Diagnosis_Label": "Diagnosis Status"},
-        title=f"Bi-variate SHAP Directional Curve: {selected_shap_feat} vs CKD Risk Contribution"
-    )
-    apply_plotly_theme(fig_dep)
-    st.plotly_chart(fig_dep, use_container_width=True)
-
-# =========================================================
-# TAB 5: PATIENT RISK SIMULATOR
-# =========================================================
-with tabs[4]:
     st.subheader("🩺 Merck Clinical Patient Risk Assessment Simulator")
     st.markdown("Input patient clinical values or load a preset profile to generate live CKD risk inference & personalized SHAP attribution.")
     
@@ -874,5 +802,3 @@ with tabs[4]:
         fig_p_shap.update_layout(height=280, margin=dict(l=150, r=20, t=40, b=20))
         apply_plotly_theme(fig_p_shap)
         st.plotly_chart(fig_p_shap, use_container_width=True)
-
-
