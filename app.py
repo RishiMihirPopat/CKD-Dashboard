@@ -25,44 +25,44 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom High-Contrast CSS for Merck Biopharma Dark Theme
+# Custom Light Theme Styling
 st.markdown("""
 <style>
     /* Global Base Background & Text */
     .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
-        background-color: #0B132B !important;
-        color: #F8FAFC !important;
+        background-color: #F8FAFC !important;
+        color: #0F172A !important;
         font-family: 'Inter', system-ui, -apple-system, sans-serif;
     }
     
     /* Headers & Subtitles */
     h1, h2, h3, h4, h5, h6 {
-        color: #38BDF8 !important;
+        color: #0F4C81 !important;
         font-weight: 700 !important;
         letter-spacing: -0.02em;
     }
     
     p, label, span, li {
-        color: #E2E8F0 !important;
+        color: #1E293B !important;
     }
     
     .stMarkdown p, .stMarkdown li, .stMarkdown span {
-        color: #E2E8F0 !important;
+        color: #1E293B !important;
     }
     
     /* Card Container */
     .merck-card {
-        background: linear-gradient(135deg, #1C2541 0%, #0B132B 100%);
-        border: 1px solid #3A506B;
+        background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 100%);
+        border: 1px solid #CBD5E1;
         border-radius: 12px;
         padding: 20px;
         margin-bottom: 16px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
     }
     
     /* Metric Cards Styling */
     div[data-testid="stMetricLabel"] {
-        color: #94A3B8 !important;
+        color: #475569 !important;
         font-size: 0.92rem !important;
         font-weight: 600 !important;
     }
@@ -70,7 +70,7 @@ st.markdown("""
     div[data-testid="stMetricValue"] {
         font-size: 1.9rem !important;
         font-weight: 800 !important;
-        color: #38BDF8 !important;
+        color: #0369A1 !important;
     }
 
     div[data-testid="stMetricDelta"] > div {
@@ -80,8 +80,8 @@ st.markdown("""
     
     /* Badges */
     .badge-teal {
-        background-color: rgba(14, 165, 233, 0.2);
-        color: #38BDF8 !important;
+        background-color: rgba(14, 165, 233, 0.14);
+        color: #0369A1 !important;
         padding: 8px 16px;
         border-radius: 9999px;
         font-size: 0.9rem;
@@ -92,8 +92,8 @@ st.markdown("""
     }
     
     .badge-alert {
-        background-color: rgba(239, 68, 68, 0.2);
-        color: #F87171 !important;
+        background-color: rgba(239, 68, 68, 0.14);
+        color: #B91C1C !important;
         padding: 8px 16px;
         border-radius: 9999px;
         font-size: 0.9rem;
@@ -104,8 +104,8 @@ st.markdown("""
     }
     
     .badge-success {
-        background-color: rgba(34, 197, 94, 0.2);
-        color: #4ADE80 !important;
+        background-color: rgba(34, 197, 94, 0.14);
+        color: #15803D !important;
         padding: 8px 16px;
         border-radius: 9999px;
         font-size: 0.9rem;
@@ -118,16 +118,16 @@ st.markdown("""
     /* Tabs Navigation Header - High Contrast Fix */
     .stTabs [data-baseweb="tab-list"] {
         gap: 8px;
-        background-color: #1C2541;
+        background-color: #F1F5F9;
         padding: 8px;
         border-radius: 12px;
-        border: 1px solid #3A506B;
+        border: 1px solid #CBD5E1;
     }
     .stTabs [data-baseweb="tab"] {
         height: 48px;
         white-space: pre-wrap;
         border-radius: 8px;
-        color: #CBD5E1 !important;
+        color: #334155 !important;
         font-weight: 600 !important;
         font-size: 0.95rem !important;
     }
@@ -139,7 +139,7 @@ st.markdown("""
     
     /* Form & Input Elements */
     div[data-baseweb="select"] span {
-        color: #FFFFFF !important;
+        color: #0F172A !important;
     }
     
     /* Button Styling */
@@ -164,26 +164,26 @@ st.markdown("""
     
     /* Slider Styling */
     .stSlider label {
-        color: #E2E8F0 !important;
+        color: #1E293B !important;
         font-weight: 600 !important;
         font-size: 0.95rem !important;
     }
     
     /* Selectbox Styling */
     .stSelectbox label {
-        color: #E2E8F0 !important;
+        color: #1E293B !important;
         font-weight: 600 !important;
         font-size: 0.95rem !important;
     }
     
     /* Expander Styling */
     .stExpander summary {
-        background-color: rgba(28, 37, 65, 0.8) !important;
-        border: 1px solid rgba(58, 80, 107, 0.5) !important;
+        background-color: #F1F5F9 !important;
+        border: 1px solid #CBD5E1 !important;
         padding: 12px !important;
         border-radius: 8px !important;
         font-weight: 600 !important;
-        color: #38BDF8 !important;
+        color: #0F4C81 !important;
     }
     
     /* Column Spacing Improvements */
@@ -207,9 +207,9 @@ st.markdown("""
     
     /* Text Input Styling */
     .stTextInput input {
-        background-color: #1C2541 !important;
-        color: #F8FAFC !important;
-        border: 1px solid rgba(58, 80, 107, 0.5) !important;
+        background-color: #FFFFFF !important;
+        color: #0F172A !important;
+        border: 1px solid #CBD5E1 !important;
         border-radius: 8px !important;
         font-size: 0.95rem !important;
     }
@@ -263,15 +263,15 @@ COLOR_MAP_NUM = {
     0: "#10B981"   # Control = Green
 }
 
-# Helper to apply dark plotly template
+# Helper to apply light plotly template
 def apply_plotly_theme(fig):
     fig.update_layout(
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="#F8FAFC", family="Inter, sans-serif"),
-        xaxis=dict(gridcolor="#1E293B", zerolinecolor="#334155", title=dict(font=dict(color="#F8FAFC"))),
-        yaxis=dict(gridcolor="#1E293B", zerolinecolor="#334155", title=dict(font=dict(color="#F8FAFC"))),
-        legend=dict(font=dict(color="#F8FAFC"))
+        font=dict(color="#0F172A", family="Inter, sans-serif"),
+        xaxis=dict(gridcolor="#CBD5E1", zerolinecolor="#94A3B8", title=dict(font=dict(color="#0F172A"))),
+        yaxis=dict(gridcolor="#CBD5E1", zerolinecolor="#94A3B8", title=dict(font=dict(color="#0F172A"))),
+        legend=dict(font=dict(color="#0F172A"))
     )
     return fig
 
@@ -281,9 +281,9 @@ def apply_plotly_theme(fig):
 st.markdown("""
 <div class="merck-card">
     <div>
-        <h1 style="margin: 0; font-size: 2.2rem; color: #38BDF8 !important;">🧬 Chronic Kidney Disease (CKD) Translational Portal</h1>
-        <p style="margin: 6px 0 0 0; color: #CBD5E1 !important; font-size: 1.05rem;">
-            <b style="color: #F8FAFC;">Capstone Research Project</b> · Biostatistical Hypothesis Testing, Machine Learning Workbench & Live Patient Risk Simulator
+        <h1 style="margin: 0; font-size: 2.2rem; color: #0F4C81 !important;">🧬 Chronic Kidney Disease (CKD) Translational Portal</h1>
+        <p style="margin: 6px 0 0 0; color: #334155 !important; font-size: 1.05rem;">
+            <b style="color: #0F172A;">Capstone Research Project</b> · Biostatistical Hypothesis Testing, Machine Learning Workbench & Live Patient Risk Simulator
         </p>
     </div>
 </div>
@@ -336,7 +336,7 @@ with tabs[0]:
         fig_pie.update_traces(
             textinfo="percent+label",
             textfont=dict(size=13, color="#FFFFFF"),
-            marker=dict(line=dict(color="#0B132B", width=2))
+            marker=dict(line=dict(color="#E2E8F0", width=2))
         )
         fig_pie.update_layout(
             legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5)
@@ -347,10 +347,10 @@ with tabs[0]:
         st.markdown(f"""
         <div style="background-color: rgba(14, 165, 233, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 14px; margin-top: 10px;">
             <b style="color: #38BDF8;">Cohort Breakdown</b>:<br>
-            • <b style="color:#F8FAFC;">CKD Positive Patients</b>: <b>{n_ckd}</b> ({prev_pct:.1f}%) — Marked in <span style="color:#EF4444; font-weight:bold;">Crimson Red</span>.<br>
-            • <b style="color:#F8FAFC;">No CKD Controls</b>: <b>{n_nockd}</b> ({100-prev_pct:.1f}%) — Marked in <span style="color:#10B981; font-weight:bold;">Emerald Green</span>.<br><br>
+            • <b style="color:#0F172A;">CKD Positive Patients</b>: <b>{n_ckd}</b> ({prev_pct:.1f}%) — Marked in <span style="color:#EF4444; font-weight:bold;">Crimson Red</span>.<br>
+            • <b style="color:#0F172A;">No CKD Controls</b>: <b>{n_nockd}</b> ({100-prev_pct:.1f}%) — Marked in <span style="color:#10B981; font-weight:bold;">Emerald Green</span>.<br><br>
             <b style="color: #38BDF8;">Class Imbalance Handling</b>:<br>
-            During ML modeling, <b style="color:#F8FAFC;">SMOTE</b> is applied inside CV folds to balance decision boundaries without data leakage.
+            During ML modeling, <b style="color:#0F172A;">SMOTE</b> is applied inside CV folds to balance decision boundaries without data leakage.
         </div>
         """, unsafe_allow_html=True)
 
@@ -455,7 +455,7 @@ with tabs[1]:
         
         st.dataframe(
             chi2_df.style.map(
-                lambda v: "background-color: rgba(239,68,68,0.35); color: #FFFFFF;" if v == True else "background-color: rgba(148,163,184,0.2); color: #E2E8F0;",
+                lambda v: "background-color: rgba(239,68,68,0.20); color: #7F1D1D;" if v == True else "background-color: rgba(148,163,184,0.2); color: #334155;",
                 subset=["Significant"]
             ),
             use_container_width=True
@@ -754,9 +754,9 @@ with tabs[3]:
             mode="gauge+number",
             value=prob_ckd * 100,
             number={'suffix': "%", 'font': {'color': risk_color, 'size': 42}},
-            title={'text': "Predicted CKD Risk Probability", 'font': {'color': "#F8FAFC", 'size': 18}},
+            title={'text': "Predicted CKD Risk Probability", 'font': {'color': "#0F172A", 'size': 18}},
             gauge={
-                'axis': {'range': [0, 100], 'tickcolor': "#F8FAFC"},
+                'axis': {'range': [0, 100], 'tickcolor': "#0F172A"},
                 'bar': {'color': risk_color},
                 'steps': [
                     {'range': [0, 20], 'color': "rgba(16, 185, 129, 0.2)"},
