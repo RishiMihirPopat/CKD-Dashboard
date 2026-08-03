@@ -33,6 +33,11 @@ st.markdown("""
         color: #0F172A !important;
         font-family: 'Inter', system-ui, -apple-system, sans-serif;
     }
+
+    /* Lock light-mode presentation and hide toolbar theme controls */
+    [data-testid="stToolbar"] {
+        display: none !important;
+    }
     
     /* Headers & Subtitles */
     h1, h2, h3, h4, h5, h6 {
@@ -117,10 +122,10 @@ st.markdown("""
     /* Tabs Navigation Header - Sleek Modern Redesign */
     .stTabs [data-baseweb="tab-list"] {
         gap: 10px;
-        background: linear-gradient(135deg, #EEF4FF 0%, #E2E8F0 100%);
+        background: #EAF2FF;
         padding: 10px;
         border-radius: 16px;
-        border: 1px solid rgba(148, 163, 184, 0.45);
+        border: 1px solid #BFDBFE;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 10px 28px rgba(15, 23, 42, 0.08);
     }
     .stTabs [data-baseweb="tab"] {
@@ -145,10 +150,10 @@ st.markdown("""
         outline-offset: 2px !important;
     }
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 45%, #0369A1 100%) !important;
-        color: #FFFFFF !important;
-        border-color: rgba(3, 105, 161, 0.85) !important;
-        box-shadow: 0 8px 20px rgba(2, 132, 199, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        background: #DBEAFE !important;
+        color: #1D4ED8 !important;
+        border-color: #93C5FD !important;
+        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.35);
         font-weight: 700 !important;
     }
     .stTabs [data-baseweb="tab-highlight"] {
@@ -748,13 +753,21 @@ with tabs[3]:
     
     patient_scaled = pd.DataFrame(scaler.transform(patient_df), columns=final_features)
     
-    # Model inference using tuned XGBoost
-    tuned_model = models["XGBoost (Tuned + SMOTE)"]
-    prob_ckd = tuned_model.predict_proba(patient_scaled)[0, 1]
+    simulation_model_names = list(models.keys())
+    default_sim_model = "Logistic Regression"
+    default_sim_model_idx = simulation_model_names.index(default_sim_model) if default_sim_model in simulation_model_names else 0
     
     with sim_col2:
         st.markdown("#### 🎯 Real-Time Clinical Inference")
         st.markdown("<small style='color: #94A3B8;'>Live CKD risk prediction and stage-based risk categorization</small>", unsafe_allow_html=True)
+        selected_sim_model_name = st.selectbox(
+            "Select Model for Risk Simulation:",
+            options=simulation_model_names,
+            index=default_sim_model_idx,
+            key="sim_model_selector"
+        )
+        selected_sim_model = models[selected_sim_model_name]
+        prob_ckd = selected_sim_model.predict_proba(patient_scaled)[0, 1]
         st.markdown("")
         
         # Risk Category Badge
