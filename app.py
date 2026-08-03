@@ -115,26 +115,45 @@ st.markdown("""
         margin: 4px 0;
     }
     
-    /* Tabs Navigation Header - High Contrast Fix */
+    /* Tabs Navigation Header - Sleek Modern Redesign */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-        background-color: #F1F5F9;
-        padding: 8px;
-        border-radius: 12px;
-        border: 1px solid #CBD5E1;
+        gap: 10px;
+        background: linear-gradient(135deg, #EEF4FF 0%, #E2E8F0 100%);
+        padding: 10px;
+        border-radius: 16px;
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 10px 28px rgba(15, 23, 42, 0.08);
     }
     .stTabs [data-baseweb="tab"] {
-        height: 48px;
+        min-height: 50px;
         white-space: pre-wrap;
-        border-radius: 8px;
+        border-radius: 12px;
         color: #334155 !important;
         font-weight: 600 !important;
-        font-size: 0.95rem !important;
+        font-size: 0.94rem !important;
+        border: 1px solid transparent !important;
+        padding: 0.35rem 0.9rem !important;
+        transition: all 0.24s ease !important;
+    }
+    .stTabs [data-baseweb="tab"]:hover {
+        color: #0F172A !important;
+        background: rgba(255, 255, 255, 0.74) !important;
+        border-color: rgba(148, 163, 184, 0.45) !important;
+        transform: translateY(-1px);
+    }
+    .stTabs [data-baseweb="tab"]:focus-visible {
+        outline: 2px solid #0EA5E9 !important;
+        outline-offset: 2px !important;
     }
     .stTabs [aria-selected="true"] {
-        background-color: #0284C7 !important;
+        background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 45%, #0369A1 100%) !important;
         color: #FFFFFF !important;
+        border-color: rgba(3, 105, 161, 0.85) !important;
+        box-shadow: 0 8px 20px rgba(2, 132, 199, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.35);
         font-weight: 700 !important;
+    }
+    .stTabs [data-baseweb="tab-highlight"] {
+        background-color: transparent !important;
     }
     
     /* Form & Input Elements */
@@ -291,10 +310,10 @@ st.markdown("""
 
 # Main Navigation Tabs
 tabs = st.tabs([
-    "🌐 Executive Overview",
-    "🔬 Biostatistical Rigor",
-    "⚡ Machine Learning Benchmark",
-    "🩺 Patient Risk Simulator"
+    "Executive Overview",
+    "Biostatistical Rigor",
+    "Machine Learning Benchmark",
+    "Patient Risk Simulator"
 ])
 
 # =========================================================
