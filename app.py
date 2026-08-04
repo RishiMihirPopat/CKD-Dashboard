@@ -533,26 +533,20 @@ with tabs[1]:
 # TAB 3: MACHINE LEARNING BENCHMARK
 # =========================================================
 with tabs[2]:
-    st.subheader("🏆 Comprehensive Model Comparison Leaderboard")
-    st.markdown("""
-    The leaderboard below is transcribed from **Project_Workbook.ipynb** and includes the notebook's threshold-specific operating points for every model variant.
-    The final pipeline row is highlighted as the champion configuration from the workbook.
-    """)
-    
-    # Notebook-backed leaderboard table
-    st.markdown("### 🏆 Model Comparison Leaderboard")
+    st.subheader("🏆 Model Comparison Leaderboard")
+    st.caption("Exact leaderboard values from Project_Workbook.ipynb.")
 
-    notebook_leaderboard_df = pd.DataFrame([
-        ["Logistic Regression (Baseline + SMOTE)", "0.500", "75.6%", "0.20", "0.67 (18/27)", "0.31", "0.96", "0.76 (233/305)", "0.85", "0.58", "[18, 9, 72, 233]"],
-        ["Random Forest (Default)", "0.500", "88.9%", "0.33", "0.37 (10/27)", "0.35", "0.94", "0.93 (285/305)", "0.94", "0.64", "[10, 17, 20, 285]"],
-        ["Random Forest (No-CKD F1 Opt.)", "0.550", "88.6%", "0.36", "0.52 (14/27)", "0.42", "0.96", "0.92 (280/305)", "0.94", "0.68", "[14, 13, 25, 280]"],
-        ["Random Forest (CKD F1 Opt.)", "0.050", "92.2%", "1.00", "0.04 (1/27)", "0.07", "0.92", "1.00 (305/305)", "0.96", "0.52", "[1, 26, 0, 305]"],
-        ["XGBoost (Baseline Default)", "0.500", "88.6%", "0.35", "0.48 (13/27)", "0.41", "0.95", "0.92 (281/305)", "0.94", "0.67", "[13, 14, 24, 281]"],
-        ["XGBoost Baseline (No-CKD F1 Opt.)", "0.340", "91.3%", "0.46", "0.44 (12/27)", "0.45", "0.95", "0.95 (291/305)", "0.95", "0.70", "[12, 15, 14, 291]"],
-        ["XGBoost Baseline (CKD F1 Opt.)", "0.060", "92.5%", "0.57", "0.30 (8/27)", "0.39", "0.94", "0.98 (299/305)", "0.96", "0.68", "[8, 19, 6, 299]"],
-        ["XGBoost Tuned + SMOTE (Default)", "0.500", "92.5%", "0.57", "0.30 (8/27)", "0.39", "0.94", "0.98 (299/305)", "0.96", "0.68", "[8, 19, 6, 299]"],
-        ["XGBoost Tuned + SMOTE (CKD F1 Opt.)", "0.200", "92.8%", "1.00", "0.11 (3/27)", "0.20", "0.93", "1.00 (305/305)", "0.96", "0.58", "[3, 24, 0, 305]"],
-        ["⭐ XGBoost Tuned + SMOTE (Final Pipeline)", "0.670", "91.3%", "0.47", "0.56 (15/27)", "0.51", "0.96", "0.94 (288/305)", "0.95", "0.73", "[15, 12, 17, 288]"],
+    leaderboard_df = pd.DataFrame([
+        ["Logistic Regression (Baseline + SMOTE)", "0.500", "75.6%", "0.20", "0.67 (18/27)", "0.31", "0.96", "0.76 (233/305)", "0.85", "0.58"],
+        ["Random Forest (Default)", "0.500", "88.9%", "0.33", "0.37 (10/27)", "0.35", "0.94", "0.93 (285/305)", "0.94", "0.64"],
+        ["Random Forest (No-CKD F1 Opt.)", "0.550", "88.6%", "0.36", "0.52 (14/27)", "0.42", "0.96", "0.92 (280/305)", "0.94", "0.68"],
+        ["Random Forest (CKD F1 Opt.)", "0.050", "92.2%", "1.00", "0.04 (1/27)", "0.07", "0.92", "1.00 (305/305)", "0.96", "0.52"],
+        ["XGBoost (Baseline Default)", "0.500", "88.6%", "0.35", "0.48 (13/27)", "0.41", "0.95", "0.92 (281/305)", "0.94", "0.67"],
+        ["XGBoost Baseline (No-CKD F1 Opt.)", "0.340", "91.3%", "0.46", "0.44 (12/27)", "0.45", "0.95", "0.95 (291/305)", "0.95", "0.70"],
+        ["XGBoost Baseline (CKD F1 Opt.)", "0.060", "92.5%", "0.57", "0.30 (8/27)", "0.39", "0.94", "0.98 (299/305)", "0.96", "0.68"],
+        ["XGBoost Tuned + SMOTE (Default)", "0.500", "92.5%", "0.57", "0.30 (8/27)", "0.39", "0.94", "0.98 (299/305)", "0.96", "0.68"],
+        ["XGBoost Tuned + SMOTE (CKD F1 Opt.)", "0.200", "92.8%", "1.00", "0.11 (3/27)", "0.20", "0.93", "1.00 (305/305)", "0.96", "0.58"],
+        ["⭐ XGBoost Tuned + SMOTE (Final Pipeline)", "0.670", "91.3%", "0.47", "0.56 (15/27)", "0.51", "0.96", "0.94 (288/305)", "0.95", "0.73"],
     ], columns=[
         "Model Variant",
         "Decision Threshold",
@@ -564,10 +558,9 @@ with tabs[2]:
         "CKD Recall (Sensitivity)",
         "CKD F1-Score",
         "Macro F1-Score",
-        "Confusion Matrix [TN, FP, FN, TP]",
     ])
 
-    st.dataframe(notebook_leaderboard_df, use_container_width=True, hide_index=True)
+    st.dataframe(leaderboard_df, use_container_width=True, hide_index=True)
     
     col_m1, col_m2 = st.columns(2)
     
